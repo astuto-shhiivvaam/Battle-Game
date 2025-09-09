@@ -3,7 +3,7 @@ export class SimpleCache<T> {
   constructor(private ttlMs: number) {}
   get(key: string): T | undefined {
     const hit = this.store.get(key);
-    if (!hit) return undefined;
+    if (!hit) {return undefined; }
     if (hit.expiresAt < Date.now()) { this.store.delete(key); return undefined; }
     return hit.value;
   }

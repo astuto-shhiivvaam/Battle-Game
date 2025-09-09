@@ -7,11 +7,13 @@ import { SimpleCache } from "./lib/cache.js";
 const apiCache = new SimpleCache(60_000);
 async function fetchJson(url) {
     const hit = apiCache.get(url);
-    if (hit)
+    if (hit) {
         return hit;
+    }
     const resp = await fetch(url);
-    if (!resp.ok)
+    if (!resp.ok) {
         throw new Error(`Request failed ${resp.status}: ${url}`);
+    }
     const data = (await resp.json());
     apiCache.set(url, data);
     return data;
@@ -169,8 +171,9 @@ async function main() {
             const bSpeedEff = Math.floor(b.speed * (bStatus?.kind === "paralysis" ? 0.5 : 1));
             const order = aSpeedEff >= bSpeedEff ? ["A", "B"] : ["B", "A"];
             for (const who of order) {
-                if (aHp <= 0 || bHp <= 0)
+                if (aHp <= 0 || bHp <= 0) {
                     break;
+                }
                 const isA = who === "A";
                 const atk = isA ? a : b;
                 const def = isA ? b : a;
@@ -198,17 +201,20 @@ async function main() {
                         if (!defStatus && Math.random() < 0.2) {
                             const inflicted = atkMove.type === "electric" ? { kind: "paralysis" } : atkMove.type === "fire" ? { kind: "burn" } : atkMove.type === "poison" ? { kind: "poison" } : null;
                             if (inflicted) {
-                                if (isA)
+                                if (isA) {
                                     bStatus = inflicted;
-                                else
+                                }
+                                else {
                                     aStatus = inflicted;
+                                }
                                 log.push(`${isA ? b.name : a.name} is afflicted by ${inflicted.kind}!`);
                             }
                         }
                     }
                 }
-                if (aHp <= 0 || bHp <= 0)
+                if (aHp <= 0 || bHp <= 0) {
                     break;
+                }
                 const targetStatus = isA ? bStatus : aStatus;
                 if (targetStatus?.kind === "burn") {
                     if (isA) {
