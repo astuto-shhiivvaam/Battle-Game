@@ -9,10 +9,16 @@
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
     "demo": "tsx src/demo.ts",
+    "web": "cd web && npm run dev",
+    "api": "node api-bridge.js",
+    "ui": "concurrently \"npm run api\" \"npm run web\"",
     "lint": "eslint ."
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.1.2",
+    "concurrently": "^9.2.1",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "node-fetch": "^3.3.2",
     "zod": "^3.23.8"
   },
